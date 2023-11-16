@@ -13,6 +13,7 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   bool _showPass = false;
   final formKey1 = GlobalKey<FormState>();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _loginPageState extends State<loginPage> {
                       Colors.blue.shade400
                     ])),
                 child: Form(
-                  key: formKey1,
+                    key: formKey1,
                     child: SingleChildScrollView(
                         padding: EdgeInsets.all(32),
                         reverse: true,
@@ -68,7 +69,7 @@ class _loginPageState extends State<loginPage> {
                             SizedBox(height: 20),
                             Form(
                               autovalidateMode:
-                              AutovalidateMode.onUserInteraction,
+                                  AutovalidateMode.onUserInteraction,
                               child: TextFormField(
                                 controller: userController,
                                 validator: (value) {
@@ -88,7 +89,7 @@ class _loginPageState extends State<loginPage> {
                             SizedBox(height: 20),
                             Form(
                                 autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                                    AutovalidateMode.onUserInteraction,
                                 child: Stack(
                                   alignment: AlignmentDirectional.centerEnd,
                                   children: <Widget>[
@@ -186,40 +187,41 @@ class _loginPageState extends State<loginPage> {
         context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 
-  void loginMethod()
-  {
+  void loginMethod() {
     final form1 = formKey1.currentState!;
-    if (form1.validate()) {
-      login(userController.text.toString(),
-          passController.text.toString());
+    if (!form1.validate())
+      showTopSnackBarFailed(context);
+    else {
+      login(userController.text.toString(), passController.text.toString());
       if (isSuccessLogin) {
         movetoHome();
         showTopSnackBarSuccess(context);
       }
-      else showTopSnackBarFailed(context);
+      // else showTopSnackBarFailed(context);
     }
   }
 
   void showTopSnackBarFailed(BuildContext context) => Flushbar(
-    shouldIconPulse: false,
-    title: 'Login Failed',
-    duration: Duration(seconds: 3),
-    flushbarPosition: FlushbarPosition.TOP,
-    onTap: (_) {
-      print('Clicked bar');
-    },
-  )..show(context);
+        shouldIconPulse: false,
+        title: 'Login Failed',
+        message: 'Wrong credential',
+        duration: Duration(seconds: 3),
+        flushbarPosition: FlushbarPosition.TOP,
+        onTap: (_) {
+          print('Clicked bar');
+        },
+      )..show(context);
 
   void showTopSnackBarSuccess(BuildContext context) => Flushbar(
-    shouldIconPulse: false,
-    title: 'Login Success',
-    message: 'Proceed to homepage',
-    duration: Duration(seconds: 3),
-    flushbarPosition: FlushbarPosition.TOP,
-    onTap: (_) {
-      print('Clicked bar');
-    },
-  )..show(context);
+        shouldIconPulse: false,
+        title: 'Login Success',
+        message: 'Proceed to homepage',
+        duration: Duration(seconds: 3),
+        flushbarPosition: FlushbarPosition.TOP,
+        onTap: (_) {
+          print('Clicked bar');
+        },
+      )..show(context);
 
   void movetoSignup() {
     Navigator.push(

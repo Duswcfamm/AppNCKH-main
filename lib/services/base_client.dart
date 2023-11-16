@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:my_flutter_project/components/fetchJson.dart';
 import 'package:my_flutter_project/services/validation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart';
 
-var saveBody;
+String printToken='';
 
 void signup(String email, String username, String password) async {
   try {
@@ -31,10 +31,9 @@ void login(String username, String password) async {
     print(response.statusCode);
     if (response.statusCode == 200) {
       isSuccessLogin = true;
-      // final token = tokenFromJson(response.body.toString());
-      // print(token);
-      saveBody = json.decode(response.body);
-      final token = tokenFromJson(saveBody.toString());
+      Map<String, dynamic> responseBody = json.decode(response.body);
+      String savedToken = responseBody['data']['token'];
+      await _saveTokenToSharedPreferences(savedToken);
     } else {
       isSuccessLogin = false;
     }
@@ -42,4 +41,17 @@ void login(String username, String password) async {
     print(e.toString());
   }
 }
+
+_saveTokenToSharedPreferences(String token) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', token);
+  print('Token saved to SharedPreferences');
+}
+
+
+
+
+
+
+
 
